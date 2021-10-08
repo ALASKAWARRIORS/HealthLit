@@ -1,5 +1,5 @@
 body {
-	background-color: #8FCD9F;
+	background-color: lightblue;
 }
 
 h1,
@@ -14,9 +14,15 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: Arial, Helvetics, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 }
 * {box-sizing: border-box}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .navbar {
   width: 100%;
@@ -30,7 +36,7 @@ h6 {
   color: white;
   text-decoration: none;
   font-size: 20px;
-  width: 25%; /* Four links of equal widths */
+  width: 16.66666666666667%; /* Six links of equal widths */
   text-align: center;
   font-family: "Gill Sans", sans-serif;
 }
@@ -51,3 +57,11 @@ h6 {
     text-align: left;
   }
 }
+
+.team {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: stretch;
+	height: 250px;
+}
+

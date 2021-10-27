@@ -11,6 +11,14 @@ h2
 	color: white
 }
 
+p
+{
+	font-family: "Gill Sans", sans-serif;
+	font-size: 20px;
+	text-align: center;
+	color: white
+}
+
 * {box-sizing: border-box}
 
 .navbar {
@@ -52,11 +60,19 @@ h2
 }
 
 .container {
-    
     display: inline-block;
     position: relative;
     width: 300px;
     height: 375px;
+}
+
+.lindly-image
+{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 200px;
+    height: 200px;
 }
 
 .image {
@@ -74,6 +90,7 @@ h2
     transform: translate(-50%, -50%);
     font-family: sans-serif;
 }
+
 .overlay {
     position: absolute;
     opacity: 0;
@@ -88,11 +105,11 @@ h2
     left:0;
     background-color: #00b1ba;
 }
+
 .container:hover .overlay,.container:hover .overlayFade {
     opacity: 1;
 }
+
 .container:hover .overlayLeft ,.container:hover .overlayRight {
     width: 100%;
 }
-
-

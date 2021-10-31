@@ -21,39 +21,7 @@ p
 
 * {box-sizing: border-box}
 
-.navbar {
-  width: 100%;
-  background-color: lightgray;
-  overflow: auto;
-}
 
-.navbar a {
-  float: left;
-  padding: 15px;
-  color: white;
-  text-decoration: none;
-  font-size: 17px;
-  width: 16.66666666666667%; /* Six links of equal widths */
-  text-align: center;
-  font-family: "Gill Sans", sans-serif;
-}
-
-.navbar a:hover {
-  background-color: #04AA6D;
-}
-
-.navbar a.active {
-  background-color: #04AA6D;
-}
-
-@media screen and (max-width: 500px) {
-  .navbar a {
-    float: none;
-    display: block;
-    width: 100%;
-    text-align: left;
-  }
-}
 .nice
 {
   position: center;
@@ -95,7 +63,7 @@ p
     position: absolute;
     opacity: 0;
     transition:all .3s ease;
-    background-color: #008cba;
+    background-color: #e4d8c8;
 }
 
 .overlayLeft{
@@ -103,7 +71,7 @@ p
     width:0;
     top:0;
     left:0;
-    background-color: #00b1ba;
+    background-color: #e4d8c8;
 }
 
 .container:hover .overlay,.container:hover .overlayFade {

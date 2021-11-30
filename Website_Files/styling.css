@@ -81,3 +81,8 @@ p
 .container:hover .overlayLeft ,.container:hover .overlayRight {
     width: 100%;
 }
+
+.PD_text
+{
+    text-align:center;
+}

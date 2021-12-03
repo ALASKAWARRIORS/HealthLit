@@ -86,3 +86,12 @@ p
 {
     text-align:center;
 }
+.ganttchart
+{
+    width: 650px;
+    height: auto;
+    position: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

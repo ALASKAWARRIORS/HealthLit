@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "364975987439",
+    "project_id": "techdemo1healthlit",
+    "storage_bucket": "techdemo1healthlit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364975987439:android:f255b43ec10893faba991a",
+        "android_client_info": {
+          "package_name": "com.example.gtk_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364975987439-tabmi06ovhfb0rqiis3mvg43bje7cibp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_3X8UxTW5S_62k3NbSrPBkFdQMuTZ1Bo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364975987439-tabmi06ovhfb0rqiis3mvg43bje7cibp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "364975987439-pa3p6ajqjh341hhrqg92b814ou033skl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.techdemoTest"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';  // new
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,6 +52,15 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Team Health Lit Demo 1'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => modOneGame()),
+        );},
+        child: Text('Game'),
+        backgroundColor: Colors.blue,
+      ),
       body: ListView(
         children: <Widget>[
           Image.asset('assets/codelab.png'),
@@ -76,7 +86,6 @@ class HomePage extends StatelessWidget {
             endIndent: 8,
             color: Colors.grey,
           ),
-          const Header('Firrst Demo of Team Health'),
           Consumer<ApplicationState>(
             builder: (context, appState, _) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,4 +185,66 @@ class ApplicationState extends ChangeNotifier {
   void signOut() {
     FirebaseAuth.instance.signOut();
   }
+}
+
+class modOneGame extends StatelessWidget {
+ // const SecondRoute({Key? key}) : super(key: key);
+  var questions = {
+    'What is a food group?' : 'Category of foods that contain similar '
+        'nutrients.',
+    'How many servings of grains are recommended?' : '6-11 of bread, '
+        'cereal, rice, and pasta',
+    'What food group has good sources of vitamins,'
+        'minerals, and complex carbohydrates?' : 'Grains, make half your grains '
+        'whole grain bread, cereal, rice, and pasta'
+  };
+  String q1 = '', q2 = '', q3 = '';
+
+
+  modOneGame(){
+    q1 = questions.keys.toList().elementAt(0);
+    q2 = questions.keys.toList().elementAt(1);
+    q3 = questions.keys.toList().elementAt(2);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Game Module 1'),
+      ),
+      body: ListView(
+        children: [
+          Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+              onPressed: (){
+
+              },
+              child: Text(q1))
+          ),
+          Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                  onPressed: (){
+
+                  },
+                  child: Text(q2))
+          ),
+          Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                  onPressed: (){
+
+                  },
+                  child: Text(q3))
+          )
+        ],
+        )
+      );
+  }
+}
+
+void changeText(String question){
+
 }

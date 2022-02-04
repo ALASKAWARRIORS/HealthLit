@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // new
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';           // new
+import 'package:gtk_flutter/flashcard.dart';
+import 'package:provider/provider.dart';
+import 'package:flip_card/flip_card.dart'; // new
 
+import 'flashcardView.dart';
 import 'src/authentication.dart';                  // new
 
 
@@ -56,7 +59,7 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => modOneGame()),
+          MaterialPageRoute(builder: (context) => modOneGameWidget()),
         );},
         child: Text('Game'),
         backgroundColor: Colors.blue,
@@ -187,25 +190,27 @@ class ApplicationState extends ChangeNotifier {
   }
 }
 
-class modOneGame extends StatelessWidget {
- // const SecondRoute({Key? key}) : super(key: key);
-  var questions = {
-    'What is a food group?' : 'Category of foods that contain similar '
-        'nutrients.',
-    'How many servings of grains are recommended?' : '6-11 of bread, '
-        'cereal, rice, and pasta',
-    'What food group has good sources of vitamins,'
-        'minerals, and complex carbohydrates?' : 'Grains, make half your grains '
-        'whole grain bread, cereal, rice, and pasta'
-  };
-  String q1 = '', q2 = '', q3 = '';
+class modOneGameWidget extends StatefulWidget{
+  const modOneGameWidget({Key? key}) : super(key : key);
 
+  @override
+  modOneGame createState() => modOneGame();
+}
 
-  modOneGame(){
-    q1 = questions.keys.toList().elementAt(0);
-    q2 = questions.keys.toList().elementAt(1);
-    q3 = questions.keys.toList().elementAt(2);
-  }
+class modOneGame extends State<modOneGameWidget> {
+
+  List<Flashcard> flashcards = [
+    Flashcard('What is a food group?', 'Category of foods that contain similar '
+  'nutrients.'),
+    Flashcard('How many servings of grains are recommended?', '6-11 of bread, '
+        'cereal, rice, and pasta'),
+    Flashcard('What food group has good sources of vitamins,'
+        'minerals, and complex carbohydrates?',
+        'Grains, make half your grains '
+            'whole grain bread, cereal, rice, and pasta')
+  ];
+
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -213,38 +218,50 @@ class modOneGame extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Game Module 1'),
       ),
-      body: ListView(
-        children: [
-          Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-              onPressed: (){
-
-              },
-              child: Text(q1))
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                  onPressed: (){
-
-                  },
-                  child: Text(q2))
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                  onPressed: (){
-
-                  },
-                  child: Text(q3))
-          )
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 250,
+              height: 250,
+              child: FlipCard(
+                front: FlashcardView(flashcards[currentIndex].question),
+                back: FlashcardView(flashcards[currentIndex].answer),
+              )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: showPreviousCard,
+                  icon: Icon(Icons.chevron_left),
+                  label: Text("Prev")
+                ),
+                OutlinedButton.icon(
+                  onPressed: showNextCard,
+                  icon: Icon(Icons.chevron_right),
+                  label: Text("Next")
+                )
+              ]
+            )
+          ],
         )
+      )
       );
   }
-}
+  void showNextCard() {
+    setState(() {
+      currentIndex =
+          (currentIndex + 1 < flashcards.length) ? currentIndex + 1 : 0;
+    });
+  }
+  void showPreviousCard() {
+    setState(() {
+      currentIndex =
+          (currentIndex - 1 >= 0) ? currentIndex - 1 : flashcards.length - 1;
+    });
+  }
 
-void changeText(String question){
 
 }

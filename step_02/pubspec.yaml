@@ -13,6 +13,7 @@ dependencies:
   firebase_auth: ^1.0.0
   google_fonts: ^2.0.0
   provider: ^5.0.0
+  flip_card: ^0.6.0
 
 
 dev_dependencies:

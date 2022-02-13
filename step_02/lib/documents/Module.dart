@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class Module
 {
-  String id;
+  String? id;
 
-  String name;
+  String? name;
 
-  Module({required this.id, required this.name});
+  Module({ this.id, this.name});
 
   factory Module.fromJson(Map<String, dynamic> json){
     return Module(id: json ['id'], name: json['name']);

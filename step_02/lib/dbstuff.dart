@@ -6,7 +6,7 @@ import 'main.dart';
 
 
 class ListDetailDemo extends StatefulWidget {
-  ListDetailDemo({required Key key, required this.title}) : super(key: key);
+  ListDetailDemo({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -83,7 +83,7 @@ class _ListPageState extends State<ListPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DetailPage(post: post),
+          builder: (context) => DetailPage(post: post,),
         ));
   }
 
@@ -107,14 +107,13 @@ class _ListPageState extends State<ListPage> {
               //Otherwise we have it or failed.
               else {
                 return ListView.builder(
-                    //Amount of documents in the documents snapshot we grabbed.
-                    itemCount: snapshot.data.length,
+                    //Amount of documents in the documents snapshot we grabbed
                     //This will build up the ListTiles for all the posts stored.
                     itemBuilder: (context, index) {
                       return ListTile(
                         //This changed a little bit from the tutorial, data() now returns the map and we grab the "titles".
-                        title: Text(snapshot.data[index].data()["title"]),
-                        onTap: () => navigateToDetail(snapshot.data[index]),
+                        title: Text(snapshot.data as String),
+                        onTap: () => navigateToDetail(snapshot.data![index].data['title']),
                       );
                     });
               }
@@ -122,3 +121,35 @@ class _ListPageState extends State<ListPage> {
   }
 }
 
+class DetailPage extends StatefulWidget {
+  final DocumentSnapshot post;
+  //This constructor assigns the passed in post automatically to the class member.
+  DetailPage({required this.post});
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+class _DetailPageState extends State<DetailPage> {
+  late String userId;
+
+  @override
+  void initState() {
+    userId = widget.post.data() as String;
+    print(userId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.post.data() as String),
+        ),
+        body: Container(
+            child: Card(
+              //Build a ListTile to display info from the local class member post instance passed to us via the ListPage
+              child: ListTile(
+                title: Text(widget.post.data() as String),
+                subtitle: Text(widget.post.data() as String),
+              ),
+            )));
+  }
+}

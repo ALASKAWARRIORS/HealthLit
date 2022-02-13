@@ -11,8 +11,11 @@ import 'package:gtk_flutter/documents/Module.dart';
 
 class ModulePage extends StatefulWidget
 {
-  ModulePage({required Key key}) : super(key: key);
 
+  ModulePage({Key? key, required this.isOpen}) : super(key: key);
+
+
+  final bool isOpen;
   @override
   _ModulePageState createState() => _ModulePageState();
 }
@@ -52,14 +55,14 @@ class _ModulePageState extends State<ModulePage>
                         Navigator.push(
                         context,
                         MaterialPageRoute(
-                        builder: (context) => Module(isOpen: true)),
+                        builder: (context) => ModulePage(isOpen: true)),
                         );
                       },
                   ),
                   const SizedBox(width: 8),
                 ],
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text("Home"),
               onPressed: (){
                 Navigator.push(

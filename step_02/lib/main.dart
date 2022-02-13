@@ -56,14 +56,14 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return ModulePage(key: null, title: '');
+      return ModulePage(title : '');
     }
     return SignIn();
   }
 }
 
 class ModulePage extends StatefulWidget {
-  ModulePage({required Key key, required this.title}) : super(key: key);
+  ModulePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -278,7 +278,7 @@ class dbStuff extends StatelessWidget {
                 return new Text("Lessons: " + lessonDocument["Name"]);
               }),*/
               //Navigate to the list detail demo page.
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Demos page"),
                 onPressed: () => Navigator.push(
                   context,

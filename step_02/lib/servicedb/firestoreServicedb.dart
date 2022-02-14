@@ -12,7 +12,7 @@ class FirestoreService
   {
     return database
         .collection('User')
-        .doc(firebaseUser!.uid)
+        .doc(firebaseUser.uid)
         .collection('modules')
         .snapshots()
         .map((snapshot) =>

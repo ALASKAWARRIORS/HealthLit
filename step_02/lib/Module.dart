@@ -1,18 +1,11 @@
-import 'dart:async';
-import 'dart:collection';
-import 'package:cloud_firestore/cloud_firestore.dart';  // new
+  // new
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // new
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:gtk_flutter/main.dart';
-import 'package:gtk_flutter/documents/Module.dart';
 
 class ModulePage extends StatefulWidget
 {
 
-  ModulePage({Key? key, required this.isOpen}) : super(key: key);
+  ModulePage({Key key, this.isOpen}) : super(key: key);
 
 
   final bool isOpen;

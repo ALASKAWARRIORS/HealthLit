@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class Module
 {
-  String? id;
+  String id;
 
-  String? name;
+  String name;
 
-  bool? isOpen;
+  bool isOpen;
 
   Module({ this.id, this.name, this.isOpen});
 

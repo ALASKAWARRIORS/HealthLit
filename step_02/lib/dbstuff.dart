@@ -6,7 +6,7 @@ import 'main.dart';
 
 
 class ListDetailDemo extends StatefulWidget {
-  ListDetailDemo({Key? key, required this.title}) : super(key: key);
+  ListDetailDemo({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -91,7 +91,6 @@ class _ListPageState extends State<ListPage> {
   Widget build(BuildContext context) {
     return Container(
         //Use a FutureBuilder widget when waiting to build elements from FireStore.
-        //Dont need context really, but I wrote it to use the current one. Use _ to mark unused params.
         child: FutureBuilder(
             //This future object is the data we want to build from via FireStore, recieved in getPosts() above.
             future: getUserPosts(),
@@ -109,11 +108,11 @@ class _ListPageState extends State<ListPage> {
                 return ListView.builder(
                     //Amount of documents in the documents snapshot we grabbed
                     //This will build up the ListTiles for all the posts stored.
-                    itemBuilder: (context, index) {
+                    itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         //This changed a little bit from the tutorial, data() now returns the map and we grab the "titles".
-                        title: Text(snapshot.data as String),
-                        onTap: () => navigateToDetail(snapshot.data![index].data['title']),
+                        title: Text(snapshot.data[index]),
+                        onTap: () => navigateToDetail(snapshot.data[index].data['title']),
                       );
                     });
               }
@@ -124,12 +123,12 @@ class _ListPageState extends State<ListPage> {
 class DetailPage extends StatefulWidget {
   final DocumentSnapshot post;
   //This constructor assigns the passed in post automatically to the class member.
-  DetailPage({required this.post});
+  DetailPage({this.post});
   @override
   _DetailPageState createState() => _DetailPageState();
 }
 class _DetailPageState extends State<DetailPage> {
-  late String userId;
+  String userId;
 
   @override
   void initState() {

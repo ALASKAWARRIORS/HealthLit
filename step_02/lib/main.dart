@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';  // new
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // new
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gtk_flutter/flashcard.dart';
 import 'package:gtk_flutter/src/signin.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,6 @@ import 'dbstuff.dart';
 import 'flashcardView.dart';
 import 'src/authentication.dart';                  // new
 
-import 'src/widgets.dart';
 
 final firestoreInstance = FirebaseFirestore.instance;
 
@@ -63,7 +60,7 @@ class AuthenticationWrapper extends StatelessWidget {
 }
 
 class ModulePage extends StatefulWidget {
-  ModulePage({Key? key, required this.title}) : super(key: key);
+  ModulePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -87,7 +84,7 @@ class _ModulePageState extends State<ModulePage> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Course Selection Page'),
+          title: Text('Module Selection Page'),
           backgroundColor: Colors.green,
         ),
         body: Center(
@@ -96,7 +93,7 @@ class _ModulePageState extends State<ModulePage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Please select your desired course.",
+                  "Please select your desired module.",
                   style: new TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
@@ -109,8 +106,8 @@ class _ModulePageState extends State<ModulePage> {
                 children: <Widget>[
                   const ListTile(
                     leading: Icon(Icons.event_note),
-                    title: Text('ENG 400'),
-                    subtitle: Text('Linguistics Analysis.'),
+                    title: Text('Food'),
+                    subtitle: Text('Health Literacy Food.'),
                   ),
                 ],
               ),
@@ -136,7 +133,7 @@ class _ModulePageState extends State<ModulePage> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({required Key key, required this.title}) : super(key: key);
+  MyHomePage({Key key,this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -251,7 +248,7 @@ class dbStuff extends StatelessWidget {
               new StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Users')
-                      .doc(firebaseUser!.uid)
+                      .doc(firebaseUser.uid)
                       .collection('Courses')
                       .doc('Pxf1m0evwkzcJ1eqhilk')
                       .collection('Modules')
@@ -283,14 +280,14 @@ class dbStuff extends StatelessWidget {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListDetailDemo(title: "List Detail")),
+                      builder: (context) => ListDetailDemo(title: "Module Detail")),
                 ),
               )
             ])));
   }
 }
 class modOneGameWidget extends StatefulWidget{
-  const modOneGameWidget({Key? key}) : super(key : key);
+  const modOneGameWidget({Key key}) : super(key : key);
 
   @override
   modOneGame createState() => modOneGame();

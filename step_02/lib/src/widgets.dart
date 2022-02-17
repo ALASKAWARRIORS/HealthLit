@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
   const Header(this.heading);
@@ -49,7 +49,7 @@ class IconAndDetail extends StatelessWidget {
 }
 
 class StyledButton extends StatelessWidget {
-  const StyledButton({this.child, this.onPressed});
+  const StyledButton({required this.child, required this.onPressed});
   final Widget child;
   final void Function() onPressed;
 

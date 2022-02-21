@@ -73,7 +73,7 @@ class _ListPageState extends State<ListPage> {
 
   Future getUserPosts() async {
     //Get a query snapshot of the current posts of the authenticated user.
-    QuerySnapshot qnUser = await fireStoreInstance.collection("posts").get();
+    QuerySnapshot qnUser = await fireStoreInstance.collection("modules").get();
 
     //Return the current user's posts
     return qnUser.docs;
@@ -111,8 +111,8 @@ class _ListPageState extends State<ListPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         //This changed a little bit from the tutorial, data() now returns the map and we grab the "titles".
-                        title: Text(snapshot.data[index]),
-                        onTap: () => navigateToDetail(snapshot.data[index].data['title']),
+                        title: Text(snapshot.data[index].data()["title"]),
+                        onTap: () => navigateToDetail(snapshot.data[index]),
                       );
                     });
               }
@@ -132,7 +132,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
-    userId = widget.post.data() as String;
+    userId = widget.post.data()["user"];
     print(userId);
   }
 
@@ -140,14 +140,14 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.post.data() as String),
+          title: Text(widget.post.data()["title"]),
         ),
         body: Container(
             child: Card(
               //Build a ListTile to display info from the local class member post instance passed to us via the ListPage
               child: ListTile(
-                title: Text(widget.post.data() as String),
-                subtitle: Text(widget.post.data() as String),
+                title: Text(widget.post.data()["title"]),
+                subtitle: Text(widget.post.data()["owner"]),
               ),
             )));
   }

@@ -34,7 +34,7 @@ class _ModulePageState extends State<ModulePage>
             ),
             ),
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(Icons.event_note),
               title: Text('Module 1: Food Health Literacy')
             ),

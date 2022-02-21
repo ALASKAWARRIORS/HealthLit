@@ -7,8 +7,7 @@ import 'package:gtk_flutter/flashcard.dart';
 import 'package:gtk_flutter/src/signin.dart';
 import 'package:provider/provider.dart';
 import 'package:flip_card/flip_card.dart'; // new
-
-import 'dbstuff.dart';
+import 'Module.dart';
 import 'flashcardView.dart';
 import 'src/authentication.dart';                  // new
 
@@ -53,14 +52,14 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return ModulePage(title : '');
+      return CoursePage();
     }
     return SignIn();
   }
 }
 
-class ModulePage extends StatefulWidget {
-  ModulePage({Key key, this.title}) : super(key: key);
+class CoursePage extends StatefulWidget {
+  CoursePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -74,17 +73,17 @@ class ModulePage extends StatefulWidget {
   final String title;
 
   @override
-  _ModulePageState createState() => _ModulePageState();
+  _CoursePageState createState() => _CoursePageState();
 }
 
-class _ModulePageState extends State<ModulePage> {
+class _CoursePageState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Module Selection Page'),
+          title: Text('Course Selection Page'),
           backgroundColor: Colors.green,
         ),
         body: Center(
@@ -108,6 +107,23 @@ class _ModulePageState extends State<ModulePage> {
                     leading: Icon(Icons.event_note),
                     title: Text('Food'),
                     subtitle: Text('Health Literacy Food.'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(width: 3),
+                      TextButton(
+                        child: const Text('OPEN'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModulePage()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
                   ),
                 ],
               ),
@@ -225,65 +241,30 @@ class dbStuff extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Database Example')),
-        body: Center(
-            child: Column(children: <Widget>[
-              TextField(
-                controller: dataController,
-                decoration: InputDecoration(
-                  labelText: "Enter Text",
-                ),
-              ),
-              /*RaisedButton(
-            onPressed: () {
-              firestoreInstance.collection("Users").doc(firebaseUser.uid).set({
-                "name": dataController.text.trim(),
-                "courses": "ENG 400",
-              }).then((_) {
-                print("sent?");
-              });
-            },
-            child: Text("Send to Database"),
-          ),*/
-              //StreamBuilder recieves the database response snapshot and allows us to extract data.
-              new StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(firebaseUser.uid)
-                      .collection('Courses')
-                      .doc('Pxf1m0evwkzcJ1eqhilk')
-                      .collection('Modules')
-                      .doc('EzyTy0O98VGC1cYS85Iy')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return new Text("Loading");
-                    }
-                    var userDocument = snapshot.data;
-                    return new Text("ModuleName: " + "\n");
-                  }),
-
-              /*   new StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Lessons')
-                  .doc("Foods")
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return new Text("Loading");
+      //StreamBuilder recieves the database response snapshot and allows us to extract data.
+        body: StreamBuilder(
+                stream: FirebaseFirestore.instance.collection('modules ').snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView(
+                    children: snapshot.data.docs.map((document) {
+                      return Center(
+                        child: Container(
+                          // width: MediaQuery.of(context).size.width/1.2,
+                          // height: MediaQuery.of(context).size.width/3,
+                          child: Text("Title: " + document['title'] + "\n"
+                          + document['content']),
+                        ),
+                      );
+                    }).toList(),
+                  );
                 }
-                var lessonDocument = snapshot.data;
-                return new Text("Lessons: " + lessonDocument["Name"]);
-              }),*/
-              //Navigate to the list detail demo page.
-              ElevatedButton(
-                child: Text("Demos page"),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListDetailDemo(title: "Module Detail")),
                 ),
-              )
-            ])));
+            );
   }
 }
 class modOneGameWidget extends StatefulWidget{

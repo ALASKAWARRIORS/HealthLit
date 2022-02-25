@@ -86,12 +86,12 @@ class modTwoQuizState extends State<modTwoQuiz>{
                             context: context,
                             builder: (BuildContext context){
                               return AlertDialog(
-                                title: Text("WARNING!"),
-                                content: Text("Try something else"),
+                                title: Text("Try again"),
+                                content: Text("This may not be the best option to add variety to create a balanced meal."),
                                 actions: [
                                   TextButton(
-                                      onPressed: () => Navigator.pop(context, "Try Again"),
-                                      child: Text("Try Again")),
+                                      onPressed: () => Navigator.pop(context, "Ok"),
+                                      child: Text("Ok")),
                                 ],
                               );
                             }
@@ -136,12 +136,12 @@ class modTwoQuizState extends State<modTwoQuiz>{
                             context: context,
                             builder: (BuildContext context){
                               return AlertDialog(
-                                title: Text("WARNING!"),
-                                content: Text("Try something else"),
+                                title: Text("Try again"),
+                                content: Text("This may not be the best option to add variety to create a balanced meal."),
                                 actions: [
                                   TextButton(
-                                      onPressed: () => Navigator.pop(context, "Try Again"),
-                                      child: Text("Try Again")),
+                                      onPressed: () => Navigator.pop(context, "Ok"),
+                                      child: Text("Ok")),
                                 ],
                               );
                             }
@@ -192,12 +192,12 @@ class modTwoQuizState extends State<modTwoQuiz>{
                             context: context,
                             builder: (BuildContext context){
                               return AlertDialog(
-                                title: Text("WARNING!"),
-                                content: Text("Try something else"),
+                                title: Text("Try again"),
+                                content: Text("This may not be the best option to add variety to create a balanced meal."),
                                 actions: [
                                   TextButton(
-                                      onPressed: () => Navigator.pop(context, "Try Again"),
-                                      child: Text("Try Again")),
+                                      onPressed: () => Navigator.pop(context, "Ok"),
+                                      child: Text("Ok")),
                                 ],
                               );
                             }
@@ -242,12 +242,12 @@ class modTwoQuizState extends State<modTwoQuiz>{
                             context: context,
                             builder: (BuildContext context){
                               return AlertDialog(
-                                title: Text("WARNING!"),
-                                content: Text("Try something else"),
+                                title: Text("Try again"),
+                                content: Text("This may not be the best option to add variety to create a balanced meal."),
                                 actions: [
                                   TextButton(
-                                      onPressed: () => Navigator.pop(context, "Try Again"),
-                                      child: Text("Try Again")),
+                                      onPressed: () => Navigator.pop(context, "Ok"),
+                                      child: Text("Ok")),
                                 ],
                               );
                             }

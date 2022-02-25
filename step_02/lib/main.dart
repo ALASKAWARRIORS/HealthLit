@@ -11,6 +11,7 @@ import 'package:flip_card/flip_card.dart'; // new
 
 import 'flashcardView.dart';
 import 'modOneGameWidget.dart';
+import 'modThreeGameWidget.dart';
 import 'modTwoGameWidget.dart';
 import 'src/authentication.dart';                  // new
 
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => modTwoGameWidget()),
+          MaterialPageRoute(builder: (context) => modThreeGameWidget()),
         );},
         child: Text('Game'),
         backgroundColor: Colors.blue,

@@ -29,7 +29,7 @@ class modOneGame extends State<modOneGameWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Game Module 1'),
+          title: const Text('Module 1'),
         ),
 
         body: Center(

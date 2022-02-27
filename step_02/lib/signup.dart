@@ -20,6 +20,10 @@ class SignUpPage extends State<SignUp> {
   TextEditingController();
   final TextEditingController fNameController = TextEditingController();
   final TextEditingController lNameController = TextEditingController();
+  final TextEditingController childNameController = TextEditingController();
+  final TextEditingController childLastController = TextEditingController();
+  final TextEditingController childAgeController = TextEditingController();
+
   final firestoreInstance = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
@@ -73,6 +77,39 @@ class SignUpPage extends State<SignUp> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
+                    ),
+                  ),
+                ),
+
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: childNameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Child's First Name",
+                    ),
+                  ),
+                ),
+
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: childLastController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Child's Last Name",
+                    ),
+                  ),
+                ),
+
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: childAgeController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Child's Age ",
                     ),
                   ),
                 ),
@@ -147,12 +184,13 @@ class SignUpPage extends State<SignUp> {
     //Push to database with Designer designation
       firestoreInstance
           .collection("Users")
-          .doc('UserList')
-          .collection('Designers')
           .doc(firebaseUser.uid)
           .set({
         "firstname": fNameController.text.trim(),
         "lastname": lNameController.text.trim(),
+        "childfname": childNameController.text.trim(),
+        "childlname": childLastController.text.trim(),
+        "childAge": childAgeController.text.trim(),
         "email": emailController.text.trim(),
         "uid": firebaseUser.uid,
       }).then((_) {

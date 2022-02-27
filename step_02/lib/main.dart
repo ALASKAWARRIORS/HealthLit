@@ -52,7 +52,7 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return CoursePage();
+      return CoursePage(title: '');
     }
     return SignIn();
   }
@@ -118,7 +118,7 @@ class _CoursePageState extends State<CoursePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ModulePage()),
+                                builder: (context) => ModulePage(isOpen: true)),
                           );
                         },
                       ),
@@ -149,7 +149,7 @@ class _CoursePageState extends State<CoursePage> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key,this.title}) : super(key: key);
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect

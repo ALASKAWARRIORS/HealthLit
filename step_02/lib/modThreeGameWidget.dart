@@ -10,7 +10,7 @@ class medicineQuestion{
 }
 
 class modThreeGameWidget extends StatefulWidget{
-  const modThreeGameWidget({Key? key}) : super(key : key);
+  const modThreeGameWidget({Key key}) : super(key : key);
 
   @override
   modThreeGame createState() => modThreeGame();

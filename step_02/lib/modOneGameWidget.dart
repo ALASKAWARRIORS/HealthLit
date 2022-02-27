@@ -4,7 +4,7 @@ import 'flashcard.dart';
 import 'flashcardView.dart';
 
 class modOneGameWidget extends StatefulWidget{
-  const modOneGameWidget({Key? key}) : super(key : key);
+  const modOneGameWidget({Key key}) : super(key : key);
 
   @override
   modOneGame createState() => modOneGame();

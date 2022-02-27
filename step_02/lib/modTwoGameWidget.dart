@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'modTwoQuiz.dart';
 
 class modTwoGameWidget extends StatefulWidget{
-  const modTwoGameWidget({Key? key}) : super(key : key);
+  const modTwoGameWidget({Key key}) : super(key : key);
 
   @override
   modTwoGame createState() => modTwoGame();

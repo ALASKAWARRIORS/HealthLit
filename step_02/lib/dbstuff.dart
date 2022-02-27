@@ -6,7 +6,7 @@ import 'main.dart';
 
 
 class ListDetailDemo extends StatefulWidget {
-  ListDetailDemo({Key key, this.title}) : super(key: key);
+  ListDetailDemo({Key key,this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -111,8 +111,8 @@ class _ListPageState extends State<ListPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         //This changed a little bit from the tutorial, data() now returns the map and we grab the "titles".
-                        title: Text(snapshot.data[index].data()["title"]),
-                        onTap: () => navigateToDetail(snapshot.data[index]),
+                        title: Text(snapshot.data['title']),
+                        onTap: () => navigateToDetail(snapshot.data['title']),
                       );
                     });
               }

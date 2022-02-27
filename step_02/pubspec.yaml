@@ -4,29 +4,46 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^1.0.0
-  firebase_auth: ^1.0.0
-  google_fonts: ^2.0.0
-  provider: ^5.0.0
+  #Firebase plugins
+  firebase_core: "^0.5.2"
+  firebase_auth: "^0.18.3"
+  cloud_firestore: "^0.14.3"
+  firebase_storage: ^5.2.0
+  #file_picker: ^2.1.5
+  uuid: ^2.2.2
+  provider: ^4.3.2+3
+  date_format: ^1.0.9
+  google_fonts: ^1.1.1
+  intl: ^0.16.1
+  dio: ^3.0.9
+  archive: ^2.0.13
   flip_card: ^0.6.0
 
-
 dev_dependencies:
-  flutter_lints: ^1.0.0
-  flutter_test:
-    sdk: flutter
+    flutter_test:
+      sdk: flutter
+    flutter_launcher_icons: ^0.8.0
+
+  #Set our launch icon to the SmartTalk team logo
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/TeamLogo.png'
+
 
 flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
   uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/codelab.png
-    - assets/chicken_nuggets_and_french_fries.jpg
-    - assets/grilled_cheese.jpg
-    - assets/mac_and_cheese_with_hot_dogs.jpg
-    - assets/quesadilla.jpg
-    - assets/pepperoni_pizza.jpg
+    - assets/
+

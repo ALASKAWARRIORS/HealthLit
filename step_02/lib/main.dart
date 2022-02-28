@@ -3,11 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';  // new
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // new
+import 'package:gtk_flutter/Module1.dart';
+import 'package:gtk_flutter/Module2.dart';
 import 'package:gtk_flutter/flashcard.dart';
 import 'package:gtk_flutter/src/signin.dart';
 import 'package:provider/provider.dart';
 import 'package:flip_card/flip_card.dart'; // new
 import 'Module.dart';
+import 'Module3.dart';
 import 'flashcardView.dart';
 import 'src/authentication.dart';                  // new
 
@@ -83,7 +86,7 @@ class _CoursePageState extends State<CoursePage> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Course Selection Page'),
+          title: Text('Module Selection Page'),
           backgroundColor: Colors.green,
         ),
         body: Center(
@@ -118,7 +121,61 @@ class _CoursePageState extends State<CoursePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ModulePage(isOpen: true)),
+                                builder: (context) => moduleOnePage()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const ListTile(
+                    leading: Icon(Icons.event_note),
+                    title: Text('Nutrition'),
+                    subtitle: Text('Health Literacy Food Nutrition.'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(width: 3),
+                      TextButton(
+                        child: const Text('OPEN'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => moduleTwoPage()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const ListTile(
+                    leading: Icon(Icons.event_note),
+                    title: Text('Medication Dosing'),
+                    subtitle: Text('Health Literacy Medication Dosing.'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(width: 3),
+                      TextButton(
+                        child: const Text('OPEN'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => moduleThreePage()),
                           );
                         },
                       ),

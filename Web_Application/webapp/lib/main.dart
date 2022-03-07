@@ -54,13 +54,58 @@ class _UserSearchFormState extends State<UserSearchForm> {
   final userController = TextEditingController();
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("Users");
   String input = "";
-  String firstName = "";
 
-  void updateInput(String newString)
-  {
-    setState(() {
-      input = input + newString;
+  Future<void> getAllUsers() async {
+    String newString = "";
+    await userCollection.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        newString = newString + doc["FirstName"] + " " + doc["LastName"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "\n";
+      });
     });
+    setState(() {
+      input = newString;
+    });
+  }
+
+  Future<void> getUsersFN (String F_Name) async {
+    String newString = "";
+    print("Flag1");
+    await userCollection.where("FirstName", isEqualTo: F_Name).get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        newString = newString + doc["FirstName"] + " " + doc["LastName"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "\n";
+      });
+    });
+    print("Done");
+    setState(() {
+      input = newString;
+      print(input);
+    });
+  }  
+
+  void updateInput(String input)
+  {
+    print(input);
+    if(input == "")
+    {
+      getAllUsers();
+    }
+    else
+    {
+      print("Flag");
+      getUsersFN(input);
+    }
+  }
+
+  
+
+  Future<String> getAllDocs() async {
+    String newString = "";
+    await userCollection.get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          newString = newString + doc["FirstName"] + " " + doc["LastName"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "\n";
+        });
+      });
+    return newString;
   }
 
   @override
@@ -88,12 +133,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
             ),
             OutlinedButton(
               onPressed: () {
-                userCollection.get().then((QuerySnapshot querySnapshot) {
-                  querySnapshot.docs.forEach((doc) {
-                    firstName = doc["FirstName"] + " " + doc["LastName"] +"\n";
-                    updateInput(firstName);
-                  });
-                });
+                updateInput(userController.text);
               },
               child: Text("Search"),
             ),

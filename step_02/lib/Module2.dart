@@ -8,9 +8,17 @@ class moduleTwoPage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Module 2: Nutrition')),
+        appBar: AppBar(title: Text('Module 2: Nutrition'),
+            leading: GestureDetector(
+            onTap: () {
+      //add page to home
+        },
+      child: Icon(Icons.home),
+    )),
         //StreamBuilder receives the database response snapshot and allows us to extract data.
-        body: Column(children: <Widget>[
+        body: SingleChildScrollView(
+            child: Column(
+            children: <Widget>[
           new StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('modules ')
@@ -23,7 +31,8 @@ class moduleTwoPage extends StatelessWidget
                   );
                 }
                 var modDocument = snapshot.data;
-                return new Text("Module 2 " + "\n"+ modDocument['content']);
+                return new Text(modDocument['content'],
+                    style: TextStyle(fontSize: 18, fontFamily: 'Raleway'));
               }),
           RaisedButton(
             child: Text("Module 2 Game"),
@@ -33,7 +42,7 @@ class moduleTwoPage extends StatelessWidget
                   builder: (context) => modTwoGameWidget()),
             ),
           )
-        ]));
+        ])));
 
   }
 }

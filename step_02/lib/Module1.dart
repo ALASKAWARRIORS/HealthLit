@@ -7,7 +7,14 @@ class moduleOnePage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Module 1: Food')),
+      appBar: AppBar(title: Text('Module 1: Food'),
+          leading: GestureDetector(
+          onTap: () {
+      //add page to home
+    },
+      child: Icon(Icons.home),
+    )),
+
       //StreamBuilder receives the database response snapshot and allows us to extract data.
       body: Column(children: <Widget>[
       new StreamBuilder(
@@ -22,7 +29,8 @@ class moduleOnePage extends StatelessWidget
               );
             }
               var modDocument = snapshot.data;
-              return new Text("Module 1 " + "\n" + modDocument['content']);
+              return new Text(modDocument['content'],
+             style: TextStyle(fontSize: 18, fontFamily: 'Raleway'));
             }),
         RaisedButton(
           child: Text("Module 1 Game"),

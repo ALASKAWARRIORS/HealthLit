@@ -23,6 +23,7 @@ dependencies:
   dio: ^3.0.9
   archive: ^2.0.13
   flip_card: ^0.6.0
+  flutter_simple_calculator: ^1.0.4
 
 dev_dependencies:
     flutter_test:

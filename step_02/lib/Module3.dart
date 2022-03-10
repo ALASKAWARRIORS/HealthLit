@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/main.dart';
-
 import 'modThreeGameWidget.dart';
-
-
 
 class moduleThreePage extends StatelessWidget
 {
@@ -14,6 +11,10 @@ class moduleThreePage extends StatelessWidget
         appBar: AppBar(title: Text('Module 3: Medication Dosing'),
         leading: GestureDetector(
         onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CoursePage()));
           //add page to home
           },
             child: Icon(Icons.home),

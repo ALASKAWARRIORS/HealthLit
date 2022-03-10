@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/Module.dart';
 import 'package:gtk_flutter/main.dart';
 
 class moduleOnePage extends StatelessWidget
@@ -10,6 +11,10 @@ class moduleOnePage extends StatelessWidget
       appBar: AppBar(title: Text('Module 1: Food'),
           leading: GestureDetector(
           onTap: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CoursePage()));
       //add page to home
     },
       child: Icon(Icons.home),

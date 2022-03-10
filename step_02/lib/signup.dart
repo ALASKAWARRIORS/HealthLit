@@ -183,7 +183,7 @@ class SignUpPage extends State<SignUp> {
     print("====>>>>>>${firebaseUser}");
     //Push to database with Designer designation
       firestoreInstance
-          .collection("Users")
+          .collection("users")
           .doc(firebaseUser.uid)
           .set({
         "firstname": fNameController.text.trim(),

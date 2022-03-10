@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
 import 'modTwoGameWidget.dart';
 
 class moduleTwoPage extends StatelessWidget
@@ -11,6 +12,10 @@ class moduleTwoPage extends StatelessWidget
         appBar: AppBar(title: Text('Module 2: Nutrition'),
             leading: GestureDetector(
             onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursePage()));
       //add page to home
         },
       child: Icon(Icons.home),

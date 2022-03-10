@@ -313,8 +313,7 @@ class dbStuff extends StatelessWidget {
                         child: Container(
                           // width: MediaQuery.of(context).size.width/1.2,
                           // height: MediaQuery.of(context).size.width/3,
-                          child: Text("Title: " + document['title'] + "\n"
-                          + document['content']),
+                          child: Text("Title: " + document['title'] + "\n"),
                         ),
                       );
                     }).toList(),

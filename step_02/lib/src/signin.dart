@@ -1,5 +1,6 @@
 import 'package:gtk_flutter/src/reset.dart';
 
+import '../NVSTestOneWidget.dart';
 import 'authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -101,9 +102,10 @@ class SignIn extends StatelessWidget {
                                 builder: (context) => ResetScreen())),
                       )
                     ],
-                  )
+                  ),
                 ],
-              ))),
+              )),
+          ),
     );
   }
 }

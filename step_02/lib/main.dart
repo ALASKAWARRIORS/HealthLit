@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';  // new
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // new
+import 'package:gtk_flutter/Module0.dart';
 import 'package:gtk_flutter/Module1.dart';
 import 'package:gtk_flutter/Module2.dart';
 import 'package:gtk_flutter/flashcard.dart';
@@ -89,7 +90,7 @@ class _CoursePageState extends State<CoursePage> {
           title: Text('Module Selection Page'),
           backgroundColor: Colors.green,
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Padding(
@@ -102,6 +103,34 @@ class _CoursePageState extends State<CoursePage> {
                     decoration: TextDecoration.underline,
                   ),
                 ),
+              ),
+
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const ListTile(
+                    leading: Icon(Icons.event_note),
+                    title: Text('NVS Test'),
+                    subtitle: Text('The Newest Vital Sign Test, Health Literacy Assessment'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(width: 3),
+                      TextButton(
+                        child: const Text('OPEN'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => moduleZeroPage()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,

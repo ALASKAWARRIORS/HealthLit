@@ -46,8 +46,6 @@ class UserSearchForm extends StatefulWidget {
   _UserSearchFormState createState() => _UserSearchFormState();
 }
 
-enum filterType {F_Name, L_Name, Age, Sex, U_ID, Email}
-
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _UserSearchFormState extends State<UserSearchForm> {
@@ -55,10 +53,17 @@ class _UserSearchFormState extends State<UserSearchForm> {
   // of the TextField.
   final moduleController = TextEditingController();
   final userController = TextEditingController();
-  final CollectionReference moduleCollection = FirebaseFirestore.instance.collection("modules");
+  final userFNController = TextEditingController();
+  final userLNController = TextEditingController();
+  final childFNController = TextEditingController();
+  final childLNController = TextEditingController();
+  final childAgeController = TextEditingController();
+  final emailController = TextEditingController();
+  final userIDController = TextEditingController();
+  final CollectionReference moduleCollection = FirebaseFirestore.instance.collection("modules ");
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   String input = "";
-  filterType? _filter = filterType.F_Name;
+  List<bool?> filtersList = [false, false, false, false, false, false, false];
   
   Future<void> addModule(String input) async {
     int counter = 1;
@@ -67,139 +72,186 @@ class _UserSearchFormState extends State<UserSearchForm> {
         counter = counter + 1;
         });
     });
-    print(counter);
     String newMod = "Module" + counter.toString();
-    print(newMod);
     moduleCollection.add({
       "title": newMod,
       "content": input
     });
-    print("finished");
   }
-
-  Future<void> getAllUsers() async {
+  Future<void> filterCollection() async {
+    Query currentQuery = userCollection.orderBy("Userfirstname");
     String newString = "";
-    await userCollection.get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    setState(() {
-      input = newString;
-    });
-  }
 
-  Future<void> getUsersFN (String F_Name) async {
-    String newString = "";
-    await userCollection.where("First_Name", isEqualTo: F_Name).get().then((QuerySnapshot querySnapshot) {
+    if(filtersList[0] == true)
+    {
+      currentQuery = currentQuery.where("Userfirstname", isEqualTo: userFNController.text);
+    }
+    if(filtersList[1] == true)
+    {
+      currentQuery = currentQuery.where("Userlastname", isEqualTo: userLNController.text);
+    }
+    if(filtersList[2] == true)
+    {
+      currentQuery = currentQuery.where("childfname", isEqualTo: childFNController.text);
+    }
+    if(filtersList[3] == true)
+    {
+      currentQuery = currentQuery.where("childlname", isEqualTo: childLNController.text);
+    }
+    if(filtersList[4] == true)
+    {
+      currentQuery = currentQuery.where("childAge", isEqualTo: childAgeController.text);
+    }
+    if(filtersList[5] == true)
+    {
+      currentQuery = currentQuery.where("email", isEqualTo: emailController.text);
+    }
+    if(filtersList[6] == true)
+    {
+      currentQuery = currentQuery.where("uid", isEqualTo: userIDController.text);
+    }
+    await currentQuery.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    print("Done");
-    setState(() {
-      input = newString;
-      print(input);
-    });
-  }  
-
-  Future<void> getUsersLN (String L_Name) async {
-    String newString = "";
-    await userCollection.where("Last_Name", isEqualTo: L_Name).get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    setState(() {
-      input = newString;
-    });
-  }  
-
-  Future<void> getUsersAge (String Age) async {
-    String newString = "";
-    await userCollection.where("Age", isEqualTo: int.parse(Age)).get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    setState(() {
-      input = newString;
-    });
-  }  
-
-  Future<void> getUsersSex (String Sex) async {
-    String newString = "";
-    await userCollection.where("Sex", isEqualTo: Sex).get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
+        newString = newString + doc["Userfirstname"] + " " + doc["Userlastname"] + " " + doc["childfname"] + " " + doc["childlname"] + "  " + doc["childAge"] + " " + doc["email"] + " " + doc["uid"] + "\n";
       });
     });
     setState(() {
       input = newString;
     });
   }
-  Future<void> getUsersUID (String User_ID) async {
-    String newString = "";
-    await userCollection.where("User_ID", isEqualTo: User_ID).get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    setState(() {
-      input = newString;
-    });
-  }  
 
-  Future<void> getUsersEmail (String Email) async {
-    String newString = "";
-    await userCollection.where("Email", isEqualTo: Email).get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["First_Name"] + " " + doc["Last_Name"] + " " + doc["Age"].toString() + " " + doc["Sex"] + "  " + doc["User_ID"] + " " + doc["Email"] + "\n";
-      });
-    });
-    setState(() {
-      input = newString;
-    });
-  }    
-
-  void updateInput(String input)
-  {
-    print(input);
-    if(input.isEmpty)
+  List<Widget> getContainers (){
+    List<Widget> FilterBoxes = [];
+    if(filtersList[0] == true)
     {
-      getAllUsers();
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: userFNController,
+              decoration: InputDecoration(
+                hintText: 'User First Name'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.F_Name)
+    if(filtersList[1] == true)
     {
-      
-      getUsersFN(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: userLNController,
+              decoration: InputDecoration(
+                hintText: 'User Last Name'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.L_Name)
+    if(filtersList[2] == true)
     {
-      
-      getUsersLN(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: childFNController,
+              decoration: InputDecoration(
+                hintText: 'Child First Name'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.Age)
+    if(filtersList[3] == true)
     {
-      
-      getUsersAge(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: childLNController,
+              decoration: InputDecoration(
+                hintText: 'Child Last Name'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.Sex)
+    if(filtersList[4] == true)
     {
-      
-      getUsersSex(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: childAgeController,
+              decoration: InputDecoration(
+                hintText: 'Child Age'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.U_ID)
+    if(filtersList[5] == true)
     {
-      
-      getUsersUID(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                hintText: 'Email'
+              )
+            )
+          )
+        )
+      );
     }
-    else if(_filter == filterType.Email)
+    if(filtersList[6] == true)
     {
-      
-      getUsersEmail(input);
+      FilterBoxes.add(
+        Container(
+          width: 200,
+          height: 50,
+          color: Colors.grey,
+          child: Center(
+            child: TextField(
+              controller: userIDController,
+              decoration: InputDecoration(
+                hintText: 'User ID'
+              )
+            )
+          )
+        )
+      );
     }
+    return FilterBoxes;
   }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -230,82 +282,69 @@ class _UserSearchFormState extends State<UserSearchForm> {
               },
               child: Text("Upload"),
             ),
-            RadioListTile(
-              title: Text("First Name"),
-              value: filterType.F_Name, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+            CheckboxListTile(
+              title: const Text("User First Name"),
+              value: filtersList[0], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[0] = value;
                 });
-              }
-            ),
-            RadioListTile(
-              title: Text("Last Name"),
-              value: filterType.L_Name, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+              }),
+              CheckboxListTile(
+              title: const Text("User Last Name"),
+              value: filtersList[1], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[1] = value;
                 });
-              }
-            ),
-            RadioListTile(
-              title: Text("Age"),
-              value: filterType.Age, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+              }),
+              CheckboxListTile(
+              title: const Text("Child First Name"),
+              value: filtersList[2], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[2] = value;
                 });
-              }
-            ),
-            RadioListTile(
-              title: Text("Sex"),
-              value: filterType.Sex, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+              }),
+              CheckboxListTile(
+              title: const Text("Child Last Name"),
+              value: filtersList[3], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[3] = value;
                 });
-              }
-            ),
-            RadioListTile(
-              title: Text("User ID"),
-              value: filterType.U_ID, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+              }),
+              CheckboxListTile(
+              title: const Text("Child Age"),
+              value: filtersList[4], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[4] = value;
                 });
-              }
-            ),
-            RadioListTile(
-              title: Text("Email Adress"),
-              value: filterType.Email, 
-              groupValue: _filter, 
-              onChanged: (filterType? value) {
+              }),
+              CheckboxListTile(
+              title: const Text("Email Address"),
+              value: filtersList[5], 
+              onChanged: (bool? value){
                 setState(() {
-                  _filter = value;
+                  filtersList[5] = value;
                 });
-              }
-            ),
-            Container(
-              width: 200,
-              height: 40,
-              color: Colors.grey,
-              child: Center(
-                child: TextField(
-                  controller: userController,
-                  decoration: InputDecoration(
-                    hintText: 'Search for a User',
-                  )
-                )
-              )
+              }),
+              CheckboxListTile(
+              title: const Text("User ID"),
+              value: filtersList[6], 
+              onChanged: (bool? value){
+                setState(() {
+                  filtersList[6] = value;
+                });
+              }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: getContainers(),
             ),
             OutlinedButton(
               onPressed: () {
-                updateInput(userController.text);
+                filterCollection();
               },
               child: Text("Search"),
             ),
@@ -316,5 +355,3 @@ class _UserSearchFormState extends State<UserSearchForm> {
     );
   }
 }
-
-

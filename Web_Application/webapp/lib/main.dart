@@ -79,43 +79,117 @@ class _UserSearchFormState extends State<UserSearchForm> {
     });
   }
   Future<void> filterCollection() async {
-    Query currentQuery = userCollection.orderBy("Userfirstname");
-    String newString = "";
-
+    List<dynamic> allUsers = [];
+    List<dynamic> allFilters = [];
+    List<dynamic> tempList;
+    bool firstFlag = true;
+    await userCollection.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+         allUsers = allUsers + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+         
+      });
+    });
     if(filtersList[0] == true)
     {
-      currentQuery = currentQuery.where("Userfirstname", isEqualTo: userFNController.text);
+      tempList = [];
+      await userCollection.where("Userfirstname", isEqualTo: userFNController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList+ [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[1] == true)
     {
-      currentQuery = currentQuery.where("Userlastname", isEqualTo: userLNController.text);
+      tempList = [];
+      await userCollection.where("Userlastname", isEqualTo: userLNController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[2] == true)
     {
-      currentQuery = currentQuery.where("childfname", isEqualTo: childFNController.text);
+      tempList = [];
+      await userCollection.where("childfname", isEqualTo: childFNController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[3] == true)
     {
-      currentQuery = currentQuery.where("childlname", isEqualTo: childLNController.text);
+      tempList = [];
+      await userCollection.where("childlname", isEqualTo: childLNController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[4] == true)
     {
-      currentQuery = currentQuery.where("childAge", isEqualTo: childAgeController.text);
+      tempList = [];
+      await userCollection.where("childAge", isEqualTo: childAgeController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[5] == true)
     {
-      currentQuery = currentQuery.where("email", isEqualTo: emailController.text);
+      tempList = [];
+      await userCollection.where("email", isEqualTo: emailController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
+      });
+      allFilters = allFilters + [tempList];
     }
     if(filtersList[6] == true)
     {
-      currentQuery = currentQuery.where("uid", isEqualTo: userIDController.text);
-    }
-    await currentQuery.get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        newString = newString + doc["Userfirstname"] + " " + doc["Userlastname"] + " " + doc["childfname"] + " " + doc["childlname"] + "  " + doc["childAge"] + " " + doc["email"] + " " + doc["uid"] + "\n";
+      tempList = [];
+      await userCollection.where("uid", isEqualTo: userIDController.text).get().then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
+        });
       });
+      allFilters = allFilters + [tempList];
+    }
+    List<dynamic> filteredUsers = [];
+    bool filterTest;
+    bool userMatchTest;
+    allUsers.forEach((user){
+      filterTest = true;
+      allFilters.forEach((filter){
+        if(filterTest)
+        {
+          userMatchTest = true;
+          filter.forEach((filterUser){
+            if(userMatchTest && user[6] == filterUser[6])
+            {
+              userMatchTest = false;
+            }
+          });
+          if(userMatchTest)
+          {
+            filterTest = false;
+          }
+        }
+      });
+      if(filterTest)
+      {
+        filteredUsers = filteredUsers + [user];
+      }
     });
     setState(() {
+      String newString = "";
+      filteredUsers.forEach((user){
+        newString = newString + user[0] + " " + user[1] + " " + user[2] + " " + user[3] + " " + user[4] + " " + user[5] + " " + user[6] + "\n";
+      });
       input = newString;
     });
   }

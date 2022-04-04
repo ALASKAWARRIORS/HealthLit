@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gtk_flutter/Module.dart';
 import 'package:gtk_flutter/main.dart';
 
+import 'modOneGameWidget.dart';
+
 class moduleOnePage extends StatelessWidget
 {
   @override

@@ -25,7 +25,7 @@ class ResetScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'SmartTalk',
+                      'HealthLit',
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,

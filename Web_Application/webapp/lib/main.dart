@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io' as io;
 
 void main() {
   runApp(MyApp());
@@ -52,32 +57,44 @@ class _UserSearchFormState extends State<UserSearchForm> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final moduleController = TextEditingController();
-  final userController = TextEditingController();
   final userFNController = TextEditingController();
   final userLNController = TextEditingController();
   final childFNController = TextEditingController();
   final childLNController = TextEditingController();
   final childAgeController = TextEditingController();
   final emailController = TextEditingController();
-  final userIDController = TextEditingController();
   final CollectionReference moduleCollection = FirebaseFirestore.instance.collection("modules ");
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
+  final Reference modules = FirebaseStorage.instance.ref("Module Document");
   String input = "";
-  List<bool?> filtersList = [false, false, false, false, false, false, false];
+  List<bool?> filtersList = [false, false, false, false, false, false];
   
-  Future<void> addModule(String input) async {
+  Future<void> addModule() async {
     int counter = 1;
-    await moduleCollection.get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        counter = counter + 1;
-        });
-    });
-    String newMod = "Module" + counter.toString();
-    moduleCollection.add({
-      "title": newMod,
-      "content": input
-    });
+    String dirName;
+    Reference newModule;
+    Uint8List fileData;
+    String fileName;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true, 
+      type: FileType.custom, 
+      allowedExtensions: ['jpg','txt']
+    );
+    if (result != null) {
+      ListResult moduleList = await modules.listAll();
+      moduleList.prefixes.forEach((module) { 
+        counter++;
+      });
+
+      result.files.forEach((file) {
+        dirName = "Module Document/module" + counter.toString() + "/" + file.name;
+        newModule = FirebaseStorage.instance.ref(dirName);
+        fileData = file.bytes as Uint8List;
+        newModule.putData(fileData);
+      });
+    }
   }
+
   Future<void> filterCollection() async {
     List<dynamic> allUsers = [];
     List<dynamic> allFilters = [];
@@ -89,7 +106,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
          
       });
     });
-    if(filtersList[0] == true)
+    if(filtersList[0] == true && userFNController.text != "")
     {
       tempList = [];
       await userCollection.where("Userfirstname", isEqualTo: userFNController.text).get().then((QuerySnapshot querySnapshot) {
@@ -99,7 +116,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
       });
       allFilters = allFilters + [tempList];
     }
-    if(filtersList[1] == true)
+    if(filtersList[1] == true && userLNController.text != "")
     {
       tempList = [];
       await userCollection.where("Userlastname", isEqualTo: userLNController.text).get().then((QuerySnapshot querySnapshot) {
@@ -109,7 +126,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
       });
       allFilters = allFilters + [tempList];
     }
-    if(filtersList[2] == true)
+    if(filtersList[2] == true && childFNController.text != "")
     {
       tempList = [];
       await userCollection.where("childfname", isEqualTo: childFNController.text).get().then((QuerySnapshot querySnapshot) {
@@ -119,7 +136,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
       });
       allFilters = allFilters + [tempList];
     }
-    if(filtersList[3] == true)
+    if(filtersList[3] == true && childLNController.text != "")
     {
       tempList = [];
       await userCollection.where("childlname", isEqualTo: childLNController.text).get().then((QuerySnapshot querySnapshot) {
@@ -129,7 +146,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
       });
       allFilters = allFilters + [tempList];
     }
-    if(filtersList[4] == true)
+    if(filtersList[4] == true && childAgeController.text != "")
     {
       tempList = [];
       await userCollection.where("childAge", isEqualTo: childAgeController.text).get().then((QuerySnapshot querySnapshot) {
@@ -139,20 +156,10 @@ class _UserSearchFormState extends State<UserSearchForm> {
       });
       allFilters = allFilters + [tempList];
     }
-    if(filtersList[5] == true)
+    if(filtersList[5] == true && emailController.text != "")
     {
       tempList = [];
       await userCollection.where("email", isEqualTo: emailController.text).get().then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-         tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
-        });
-      });
-      allFilters = allFilters + [tempList];
-    }
-    if(filtersList[6] == true)
-    {
-      tempList = [];
-      await userCollection.where("uid", isEqualTo: userIDController.text).get().then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((doc) {
          tempList = tempList + [[doc["Userfirstname"], doc["Userlastname"], doc["childfname"], doc["childlname"], doc["childAge"], doc["email"], doc["uid"]]];
         });
@@ -188,7 +195,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
     setState(() {
       String newString = "";
       filteredUsers.forEach((user){
-        newString = newString + user[0] + " " + user[1] + " " + user[2] + " " + user[3] + " " + user[4] + " " + user[5] + " " + user[6] + "\n";
+        newString = newString + user[0] + " " + user[1] + " " + user[2] + " " + user[3] + " " + user[4] + " " + user[5] + "\n";
       });
       input = newString;
     });
@@ -304,24 +311,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
         )
       );
     }
-    if(filtersList[6] == true)
-    {
-      FilterBoxes.add(
-        Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
-          child: Center(
-            child: TextField(
-              controller: userIDController,
-              decoration: InputDecoration(
-                hintText: 'User ID'
-              )
-            )
-          )
-        )
-      );
-    }
     return FilterBoxes;
   }
   
@@ -334,98 +323,105 @@ class _UserSearchFormState extends State<UserSearchForm> {
         title: Text("Web Portal"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: GridView.count(
+          crossAxisCount: 2,
+          physics: ScrollPhysics(),
           children: <Widget>[
-            Container(
-              width: 200,
-              height: 50,
-              color: Colors.grey,
-              child: Center(
-                child: TextField(
-                  controller: moduleController,
-                  decoration: InputDecoration(
-                    hintText: 'Copy and Paste Module Here'
+            Column(
+              children: <Widget>[ 
+                Container(
+                  width: 200,
+                  height: 50,
+                  color: Colors.grey,
+                  child: Center(
+                    child: TextField(
+                      controller: moduleController,
+                      decoration: InputDecoration(
+                        hintText: 'Copy and Paste Module Here'
+                      )
+                    )
                   )
-                )
-              )
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    addModule();
+                  },
+                child: Text("Pick Files"),
+                ),
+              ],
             ),
-            OutlinedButton(
-              onPressed: () {
-                addModule(moduleController.text);
-              },
-              child: Text("Upload"),
-            ),
-            CheckboxListTile(
-              title: const Text("User First Name"),
-              value: filtersList[0], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[0] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("User Last Name"),
-              value: filtersList[1], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[1] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("Child First Name"),
-              value: filtersList[2], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[2] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("Child Last Name"),
-              value: filtersList[3], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[3] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("Child Age"),
-              value: filtersList[4], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[4] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("Email Address"),
-              value: filtersList[5], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[5] = value;
-                });
-              }),
-              CheckboxListTile(
-              title: const Text("User ID"),
-              value: filtersList[6], 
-              onChanged: (bool? value){
-                setState(() {
-                  filtersList[6] = value;
-                });
-              }),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: getContainers(),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                filterCollection();
-              },
-              child: Text("Search"),
-            ),
-            Text(input)
+            Column(
+              children: <Widget>[
+                CheckboxListTile(
+                  title: const Text("User First Name"),
+                  value: filtersList[0], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[0] = value;
+                    });
+                  }
+                ),
+                CheckboxListTile(
+                  title: const Text("User Last Name"),
+                  value: filtersList[1], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[1] = value;
+                    });
+                  }
+                ),
+                CheckboxListTile(
+                  title: const Text("Child First Name"),
+                  value: filtersList[2], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[2] = value;
+                    });
+                  }
+                ),
+                CheckboxListTile(
+                  title: const Text("Child Last Name"),
+                  value: filtersList[3], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[3] = value;
+                    });
+                  }
+                ),
+                CheckboxListTile(
+                  title: const Text("Child Age"),
+                  value: filtersList[4], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[4] = value;
+                    });
+                  }
+                ),
+                CheckboxListTile(
+                  title: const Text("Email Address"),
+                  value: filtersList[5], 
+                  onChanged: (bool? value){
+                    setState(() {
+                      filtersList[5] = value;
+                    });
+                  }
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: getContainers(),
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    filterCollection();
+                  },
+                  child: Text("Search"),
+                ),
+                Text(input)
+              ],
+            )   
           ]
         ),
-      ),
+      )
     );
   }
 }

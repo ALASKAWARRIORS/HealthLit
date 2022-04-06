@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/main.dart';
 
-import 'NVSTestOneWidget.dart';
+import 'game/NVSTestOneWidget.dart';
+
 
 class moduleZeroPage extends StatelessWidget
 {

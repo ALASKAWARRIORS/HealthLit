@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:gtk_flutter/servicedb/firestoreServicedb.dart';
 
-import 'documents/Course.dart';
+import 'Course.dart';
 
 
 class CourseProvider with ChangeNotifier {

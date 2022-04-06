@@ -1,7 +1,9 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+
 import 'flashcard.dart';
 import 'flashcardView.dart';
+
 
 class modOneGameWidget extends StatefulWidget{
   const modOneGameWidget({Key key}) : super(key : key);

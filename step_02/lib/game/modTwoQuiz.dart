@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/modTwoGameWidget.dart';
+
+import 'modTwoGameWidget.dart';
 
 class foodChoiceQuiz{
   var pictures = [

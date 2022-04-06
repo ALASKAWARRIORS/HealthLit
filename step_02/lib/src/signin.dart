@@ -1,10 +1,11 @@
 import 'package:gtk_flutter/src/reset.dart';
+import 'package:gtk_flutter/src/signup.dart';
 
-import '../NVSTestOneWidget.dart';
+
 import 'authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:gtk_flutter/signup.dart';
+
 
 
 class SignIn extends StatelessWidget {

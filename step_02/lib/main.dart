@@ -7,13 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart'; // new
 import 'package:gtk_flutter/Module0.dart';
 import 'package:gtk_flutter/Module1.dart';
 import 'package:gtk_flutter/Module2.dart';
-import 'package:gtk_flutter/flashcard.dart';
 import 'package:gtk_flutter/src/signin.dart';
 import 'package:provider/provider.dart';
 import 'package:flip_card/flip_card.dart'; // new
 import 'Module.dart';
 import 'Module3.dart';
-import 'flashcardView.dart';
 import 'src/authentication.dart';                  // new
 
 

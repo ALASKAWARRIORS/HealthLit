@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/Module.dart';
 import 'package:gtk_flutter/main.dart';
 
-import 'modOneGameWidget.dart';
+import 'game/modOneGameWidget.dart';
+
 
 class moduleOnePage extends StatelessWidget
 {

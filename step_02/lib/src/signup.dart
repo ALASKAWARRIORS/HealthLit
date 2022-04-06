@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gtk_flutter/verify.dart';
+import 'package:gtk_flutter/src/verify.dart';
 import 'package:provider/src/provider.dart';
 
-import 'src/authentication.dart';
+import 'authentication.dart';
 import 'package:flutter/material.dart';
 
 final username = FirebaseFirestore.instance.collection('Usernames');

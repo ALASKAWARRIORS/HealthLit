@@ -44,7 +44,7 @@ class modTwoGame extends State<modTwoGameWidget>{
 
   void startQuiz(){
     setState(() {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> new modTwoQuiz()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> new modTwoQuiz()));
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
 import 'modTwoGameWidget.dart';
 
 class moduleTwoPage extends StatelessWidget
@@ -8,9 +9,21 @@ class moduleTwoPage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Module 2: Nutrition')),
+        appBar: AppBar(title: Text('Module 2: Nutrition'),
+            leading: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursePage()));
+      //add page to home
+        },
+      child: Icon(Icons.home),
+    )),
         //StreamBuilder receives the database response snapshot and allows us to extract data.
-        body: Column(children: <Widget>[
+        body: SingleChildScrollView(
+            child: Column(
+            children: <Widget>[
           new StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('modules ')
@@ -23,7 +36,8 @@ class moduleTwoPage extends StatelessWidget
                   );
                 }
                 var modDocument = snapshot.data;
-                return new Text("Module 2 " + "\n"+ modDocument['content']);
+                return new Text(modDocument['content'],
+                    style: TextStyle(fontSize: 18, fontFamily: 'Raleway'));
               }),
           RaisedButton(
             child: Text("Module 2 Game"),
@@ -33,7 +47,7 @@ class moduleTwoPage extends StatelessWidget
                   builder: (context) => modTwoGameWidget()),
             ),
           )
-        ]));
+        ])));
 
   }
 }

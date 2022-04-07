@@ -58,7 +58,7 @@ class NVSTestOneWidgetState extends State<NVSTestOneWidget>{
           title: Text('NVS Test 1'),
           backgroundColor: Colors.black,
         ),
-          body: Container(
+          body: Scrollbar(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[

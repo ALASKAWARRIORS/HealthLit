@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io' as io;
 
 void main() {
   runApp(MyApp());
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done)
           {
             return MaterialApp(
-              title: "Web Portal",
+              title: "Healthlit Web Portal",
               home: UserSearchForm(),
             );
           }
@@ -56,7 +55,6 @@ class UserSearchForm extends StatefulWidget {
 class _UserSearchFormState extends State<UserSearchForm> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final moduleController = TextEditingController();
   final userFNController = TextEditingController();
   final userLNController = TextEditingController();
   final childFNController = TextEditingController();
@@ -66,15 +64,18 @@ class _UserSearchFormState extends State<UserSearchForm> {
   final CollectionReference moduleCollection = FirebaseFirestore.instance.collection("modules ");
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   final Reference modules = FirebaseStorage.instance.ref("Module Document");
+  String modOutput = "";
   String input = "";
+  List<dynamic> userOutput = [];
   List<bool?> filtersList = [false, false, false, false, false, false];
+  final TextStyle Title = TextStyle(fontSize: 32);
   
   Future<void> addModule() async {
     int counter = 1;
     String dirName;
     Reference newModule;
     Uint8List fileData;
-    String fileName;
+    String newString = "";
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true, 
       type: FileType.custom, 
@@ -86,11 +87,17 @@ class _UserSearchFormState extends State<UserSearchForm> {
         counter++;
       });
 
+      newString = newString + "Module " + counter.toString() + "\n";
+
       result.files.forEach((file) {
         dirName = "Module Document/module" + counter.toString() + "/" + file.name;
         newModule = FirebaseStorage.instance.ref(dirName);
         fileData = file.bytes as Uint8List;
         newModule.putData(fileData);
+        newString = newString + file.name + " Uploaded!\n";
+      });
+      setState(() {
+        modOutput = newString;
       });
     }
   }
@@ -194,10 +201,14 @@ class _UserSearchFormState extends State<UserSearchForm> {
     });
     setState(() {
       String newString = "";
+      List<dynamic> newOutput = [];
       filteredUsers.forEach((user){
         newString = newString + user[0] + " " + user[1] + " " + user[2] + " " + user[3] + " " + user[4] + " " + user[5] + "\n";
+        newOutput = newOutput + [user.sublist(5)];
       });
       input = newString;
+      userOutput = newOutput;
+      print(userOutput);
     });
   }
 
@@ -207,9 +218,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+          margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: userFNController,
@@ -225,9 +238,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+          margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: userLNController,
@@ -243,9 +258,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+          margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: childFNController,
@@ -261,9 +278,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+         margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: childLNController,
@@ -279,9 +298,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+         margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: childAgeController,
@@ -297,9 +318,11 @@ class _UserSearchFormState extends State<UserSearchForm> {
     {
       FilterBoxes.add(
         Container(
-          width: 200,
-          height: 50,
-          color: Colors.grey,
+          margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black)
+          ),
           child: Center(
             child: TextField(
               controller: emailController,
@@ -320,38 +343,35 @@ class _UserSearchFormState extends State<UserSearchForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Web Portal"),
+        title: Text("Healthlit Web Portal"),
       ),
       body: Center(
         child: GridView.count(
           crossAxisCount: 2,
-          physics: ScrollPhysics(),
           children: <Widget>[
             Column(
-              children: <Widget>[ 
-                Container(
-                  width: 200,
-                  height: 50,
-                  color: Colors.grey,
-                  child: Center(
-                    child: TextField(
-                      controller: moduleController,
-                      decoration: InputDecoration(
-                        hintText: 'Copy and Paste Module Here'
-                      )
-                    )
-                  )
-                ),
+              children: <Widget>[
+                SizedBox(
+                  height: 25),
+                Text("Upload Module", style: Title), 
+                SizedBox(
+                  height: 25),
                 OutlinedButton(
                   onPressed: () {
                     addModule();
                   },
                 child: Text("Pick Files"),
                 ),
+                Text(modOutput),
               ],
             ),
             Column(
               children: <Widget>[
+                SizedBox(
+                  height: 25),
+                Text("User Data", style: Title),
+                SizedBox(
+                  height: 25),
                 CheckboxListTile(
                   title: const Text("User First Name"),
                   value: filtersList[0], 

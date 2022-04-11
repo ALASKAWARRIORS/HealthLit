@@ -1,10 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done)
           {
             return MaterialApp(
-              title: "Healthlit Web Portal",
-              home: UserSearchForm(),
+              title: "HealthLit Web Portal",
+              home: WebPortal(),
             );
           }
           return CircularProgressIndicator();
@@ -42,17 +42,24 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Filter {
+  final int filterID;
+  final String filterName;
+
+  Filter(this.filterID,this.filterName);
+  }
+
 // Define a custom Form widget.
-class UserSearchForm extends StatefulWidget {
-  const UserSearchForm({Key? key}) : super(key: key);
+class WebPortal extends StatefulWidget {
+  const WebPortal({Key? key}) : super(key: key);
 
   @override
-  _UserSearchFormState createState() => _UserSearchFormState();
+  _WebPortalState createState() => _WebPortalState();
 }
 
 // Define a corresponding State class.
 // This class holds the data related to the Form.
-class _UserSearchFormState extends State<UserSearchForm> {
+class _WebPortalState extends State<WebPortal> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final userFNController = TextEditingController();
@@ -65,8 +72,17 @@ class _UserSearchFormState extends State<UserSearchForm> {
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
   final Reference modules = FirebaseStorage.instance.ref("Module Document");
   String modOutput = "";
-  String input = "";
+  String userStrOutput = "";
   List<dynamic> userOutput = [];
+  List<Filter> filterList = [
+    Filter(0, "User First Name"),
+    Filter(1, "User Last Name"),
+    Filter(2, "Child First Name"),
+    Filter(3, "Child Last Name"),
+    Filter(4, "Child Age"),
+    Filter(5, "Email"),
+  ];
+  List<Filter> selectedFilters = [];
   List<bool?> filtersList = [false, false, false, false, false, false];
   final TextStyle Title = TextStyle(fontSize: 32);
   
@@ -206,7 +222,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
         newString = newString + user[0] + " " + user[1] + " " + user[2] + " " + user[3] + " " + user[4] + " " + user[5] + "\n";
         newOutput = newOutput + [user.sublist(5)];
       });
-      input = newString;
+      userStrOutput = newString;
       userOutput = newOutput;
       print(userOutput);
     });
@@ -219,7 +235,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
           margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -239,7 +254,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
           margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -259,7 +273,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
           margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -279,7 +292,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
          margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -299,7 +311,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
          margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -319,7 +330,6 @@ class _UserSearchFormState extends State<UserSearchForm> {
       FilterBoxes.add(
         Container(
           margin: const EdgeInsets.all(15.0),
-          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black)
           ),
@@ -337,13 +347,36 @@ class _UserSearchFormState extends State<UserSearchForm> {
     return FilterBoxes;
   }
   
+  void showMultiSelect(BuildContext context) async {
+    final _items = filterList
+        .map((filter) => MultiSelectItem<Filter>(filter, filter.filterName))
+        .toList();
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return  MultiSelectDialog(
+          items: _items,
+          initialValue: selectedFilters,
+          onConfirm: (values) {
+            selectedFilters = values as List<Filter>;
+            filtersList = [false, false, false, false, false, false];
+            setState(() {
+              selectedFilters.forEach((filter) { 
+                filtersList[filter.filterID] = true;
+              });
+            });
+          },
+        );
+      },
+    );
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Healthlit Web Portal"),
+        title: Text("HealthLit Web Portal"),
       ),
       body: Center(
         child: GridView.count(
@@ -356,6 +389,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
                 Text("Upload Module", style: Title), 
                 SizedBox(
                   height: 25),
+                Text(".jpg and .txt files only"),
                 OutlinedButton(
                   onPressed: () {
                     addModule();
@@ -372,60 +406,13 @@ class _UserSearchFormState extends State<UserSearchForm> {
                 Text("User Data", style: Title),
                 SizedBox(
                   height: 25),
-                CheckboxListTile(
-                  title: const Text("User First Name"),
-                  value: filtersList[0], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[0] = value;
-                    });
-                  }
-                ),
-                CheckboxListTile(
-                  title: const Text("User Last Name"),
-                  value: filtersList[1], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[1] = value;
-                    });
-                  }
-                ),
-                CheckboxListTile(
-                  title: const Text("Child First Name"),
-                  value: filtersList[2], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[2] = value;
-                    });
-                  }
-                ),
-                CheckboxListTile(
-                  title: const Text("Child Last Name"),
-                  value: filtersList[3], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[3] = value;
-                    });
-                  }
-                ),
-                CheckboxListTile(
-                  title: const Text("Child Age"),
-                  value: filtersList[4], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[4] = value;
-                    });
-                  }
-                ),
-                CheckboxListTile(
-                  title: const Text("Email Address"),
-                  value: filtersList[5], 
-                  onChanged: (bool? value){
-                    setState(() {
-                      filtersList[5] = value;
-                    });
-                  }
-                ),
+                OutlinedButton(
+                  onPressed: () {
+                    showMultiSelect(context);
+                  }, 
+                  child: Text("Pick Filters")),
+                SizedBox(
+                  height: 25),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: getContainers(),
@@ -436,7 +423,7 @@ class _UserSearchFormState extends State<UserSearchForm> {
                   },
                   child: Text("Search"),
                 ),
-                Text(input)
+                Text(userStrOutput)
               ],
             )   
           ]

@@ -96,7 +96,7 @@ class _WebPortalState extends State<WebPortal> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true, 
       type: FileType.custom, 
-      allowedExtensions: ['jpg','txt']
+      allowedExtensions: ['pdf']
     );
     if (result != null) {
       ListResult moduleList = await modules.listAll();
@@ -390,7 +390,7 @@ class _WebPortalState extends State<WebPortal> {
                 Text("Upload Module", style: Title), 
                 SizedBox(
                   height: 25),
-                Text(".jpg and .txt files only"),
+                Text(".pdf files only"),
                 OutlinedButton(
                   onPressed: () {
                     addModule();

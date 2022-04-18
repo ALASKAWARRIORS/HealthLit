@@ -1,53 +1,74 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/main.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
+import 'package:gtk_flutter/game/modTwoGameWidget.dart';
 
 import 'game/modThreeGameWidget.dart';
 
-class moduleThreePage extends StatelessWidget
-{
+
+class loadPdfMod3 extends StatefulWidget{
+  @override
+  _loadPdfStateMod3 createState() => _loadPdfStateMod3();
+}
+
+class _loadPdfStateMod3 extends State<loadPdfMod3> {
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+
+  Future<void> listExample() async {
+    firebase_storage.ListResult result =
+    await firebase_storage.FirebaseStorage.instance.ref().child('modules').listAll();
+
+    result.items.forEach((firebase_storage.Reference ref) {
+      print('Found file: $ref');
+    });
+
+    result.prefixes.forEach((firebase_storage.Reference ref) {
+      print('Found directory: $ref');
+    });
+  }
+
+  Future<void> downloadURLExampleMod3() async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref('modules/Module3.pdf')
+        .getDownloadURL();
+    print(downloadURL);
+    PDFDocument doc = await PDFDocument.fromURL(downloadURL);
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewPDFMod3(doc)));  //Notice the Push Route once this is done.
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listExample();
+    downloadURLExampleMod3();
+    print("All done!");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+      ),
+    );
+  }
+}
+
+class ViewPDFMod3 extends StatelessWidget{
+  PDFDocument document;
+  ViewPDFMod3(this.document);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Module 3: Medication Dosing'),
-        leading: GestureDetector(
-        onTap: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CoursePage()));
-          //add page to home
-          },
-            child: Icon(Icons.home),
-        )),
-        //StreamBuilder receives the database response snapshot and allows us to extract data.
-        body: SingleChildScrollView(
-            child: Column(
-                children: <Widget>[
-          new StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('modules ')
-                  .doc('DiYxOKwhrWy0Zv13mVxJ')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                var modDocument = snapshot.data;
-                return new Text(modDocument['content'],
-                    style: TextStyle(fontSize: 18, fontFamily: 'Raleway'));
-              }),
-          RaisedButton(
-            child: Text("Module 3 Game"),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => modThreeGameWidget()),
-            ),
-          )
-        ])));
+        appBar: AppBar(title: Text('Module 3')),
+        floatingActionButton: FloatingActionButton.extended(
+          label: const Text('Game'),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => modThreeGameWidget())),
+        ),
+        floatingActionButtonLocation:FloatingActionButtonLocation.miniEndFloat ,
+        body: PDFViewer(document: document)
+    );
 
   }
+
 }

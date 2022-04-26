@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
-import 'package:gtk_flutter/game/modTwoGameWidget.dart';
 
 
-class loadPdfMod2 extends StatefulWidget{
+class loadPdf extends StatefulWidget{
   @override
-  _loadPdfStateMod2 createState() => _loadPdfStateMod2();
+  _loadPdfState createState() => _loadPdfState();
 }
 
-class _loadPdfStateMod2 extends State<loadPdfMod2> {
+class _loadPdfState extends State<loadPdf> {
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
   Future<void> listExample() async {
@@ -25,20 +24,20 @@ class _loadPdfStateMod2 extends State<loadPdfMod2> {
     });
   }
 
-  Future<void> downloadURLExampleMod2() async {
+  Future<void> downloadURLExample() async {
     String downloadURL = await firebase_storage.FirebaseStorage.instance
-        .ref('modules/Module2.pdf')
+        .ref('modules/Module3.pdf')
         .getDownloadURL();
     print(downloadURL);
     PDFDocument doc = await PDFDocument.fromURL(downloadURL);
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewPDFMod2(doc)));  //Notice the Push Route once this is done.
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewPDF(doc)));  //Notice the Push Route once this is done.
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     listExample();
-    downloadURLExampleMod2();
+    downloadURLExample();
     print("All done!");
   }
 
@@ -51,22 +50,11 @@ class _loadPdfStateMod2 extends State<loadPdfMod2> {
   }
 }
 
-class ViewPDFMod2 extends StatelessWidget{
-  PDFDocument document;
-  ViewPDFMod2(this.document);
-  @override
+class ViewPDF extends StatelessWidget{
+ PDFDocument document;
+ ViewPDF(this.document);
+ @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Module 2')),
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Text('Game'),
-          onPressed: () => Navigator.push(context, 
-          MaterialPageRoute(builder: (context) => modTwoGameWidget())),
-        ),
-      floatingActionButtonLocation:FloatingActionButtonLocation.miniEndFloat ,
-      body: PDFViewer(document: document)
-    );
-
+   return PDFViewer(document: document);
   }
-
 }

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // new
 import 'package:gtk_flutter/Module0.dart';
 import 'package:gtk_flutter/Module1.dart';
 import 'package:gtk_flutter/Module2.dart';
+import 'package:gtk_flutter/loadpdf.dart';
 import 'package:gtk_flutter/src/signin.dart';
 import 'package:provider/provider.dart';
 import 'package:flip_card/flip_card.dart'; // new
@@ -176,7 +177,7 @@ class _CoursePageState extends State<CoursePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => moduleTwoPage()),
+                                builder: (context) => loadPdfMod2()),
                           );
                         },
                       ),
@@ -203,7 +204,7 @@ class _CoursePageState extends State<CoursePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => moduleThreePage()),
+                                builder: (context) => loadPdfMod3()),
                           );
                         },
                       ),
@@ -216,7 +217,7 @@ class _CoursePageState extends State<CoursePage> {
                 child: Text('Data Retrieval'),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => new dbStuff()));
+                      MaterialPageRoute(builder: (context) => loadPdf()));
                 },
               ),
               RaisedButton(

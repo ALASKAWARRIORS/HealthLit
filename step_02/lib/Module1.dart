@@ -1,54 +1,73 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gtk_flutter/Module.dart';
-import 'package:gtk_flutter/main.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
+import 'package:gtk_flutter/game/modOneGameWidget.dart';
+import 'package:gtk_flutter/game/modTwoGameWidget.dart';
 
-import 'game/modOneGameWidget.dart';
 
+class loadPdfMod1 extends StatefulWidget{
+  @override
+  _loadPdfStateMod1 createState() => _loadPdfStateMod1();
+}
 
-class moduleOnePage extends StatelessWidget
-{
+class _loadPdfStateMod1 extends State<loadPdfMod1> {
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+
+  Future<void> listExample() async {
+    firebase_storage.ListResult result =
+    await firebase_storage.FirebaseStorage.instance.ref().child('modules').listAll();
+
+    result.items.forEach((firebase_storage.Reference ref) {
+      print('Found file: $ref');
+    });
+
+    result.prefixes.forEach((firebase_storage.Reference ref) {
+      print('Found directory: $ref');
+    });
+  }
+
+  Future<void> downloadURLExampleMod2() async {
+    String downloadURL = await firebase_storage.FirebaseStorage.instance
+        .ref('modules/Module1.pdf')
+        .getDownloadURL();
+    print(downloadURL);
+    PDFDocument doc = await PDFDocument.fromURL(downloadURL);
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewPDFMod1(doc)));  //Notice the Push Route once this is done.
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listExample();
+    downloadURLExampleMod2();
+    print("All done!");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+      ),
+    );
+  }
+}
+
+class ViewPDFMod1 extends StatelessWidget{
+  PDFDocument document;
+  ViewPDFMod1(this.document);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Module 1: Food'),
-          leading: GestureDetector(
-          onTap: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CoursePage()));
-      //add page to home
-    },
-      child: Icon(Icons.home),
-    )),
-
-      //StreamBuilder receives the database response snapshot and allows us to extract data.
-      body: Column(children: <Widget>[
-      new StreamBuilder(
-          stream: FirebaseFirestore.instance
-          .collection('modules ')
-          .doc('eOfMK0YpJzC6155hgl0J')
-          .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-              child: CircularProgressIndicator(),
-              );
-            }
-              var modDocument = snapshot.data;
-              return new Text(modDocument['content'],
-             style: TextStyle(fontSize: 18, fontFamily: 'Raleway'));
-            }),
-        RaisedButton(
-          child: Text("Module 1 Game"),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => modOneGameWidget()),
-          ),
-        )
-        ]));
+        appBar: AppBar(title: Text('Module 1')),
+        floatingActionButton: FloatingActionButton.extended(
+          label: const Text('Game'),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => modOneGameWidget())),
+        ),
+        floatingActionButtonLocation:FloatingActionButtonLocation.miniEndFloat ,
+        body: PDFViewer(document: document)
+    );
 
   }
+
 }

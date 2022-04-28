@@ -150,7 +150,7 @@ class _CoursePageState extends State<CoursePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => moduleOnePage()),
+                                builder: (context) => loadPdfMod1()),
                           );
                         },
                       ),
